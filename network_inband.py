@@ -3,6 +3,7 @@
 from mininet.net import Mininet
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
+from sys import argv
 
 def build_switch(net, sw=None, sw_str=None):
     sw.cmdPrint('bash experiment/start_ovsdb.sh ' + sw_str)

@@ -6,6 +6,7 @@ from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from sys import argv
 
+import subprocess
 import random
 from datetime import datetime
 

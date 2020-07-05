@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from mininet.net import Mininet
+from mininet.link import OVSLink
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from sys import argv

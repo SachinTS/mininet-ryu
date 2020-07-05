@@ -5,6 +5,9 @@ from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from sys import argv
 
+import random
+from datetime import datetime
+
 def build_switch(net, sw=None, sw_str=None):
     sw.cmdPrint('bash experiment/start_ovsdb.sh ' + sw_str)
     sw.cmdPrint('bash experiment/start_ovs.sh ' + sw_str)

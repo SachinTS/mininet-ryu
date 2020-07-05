@@ -18,7 +18,7 @@ def ovsns(number_of_hosts=2):
     "Create an empty network and add nodes to it."
 
     net = Mininet( topo=None,
-                   build=False)
+                   build=False, link=OVSLink)
 
     # setup initial topology. run ovs inside each host s1 and s2
     hr = net.addHost( 'hr', ip='10.0.0.90' )
@@ -27,7 +27,7 @@ def ovsns(number_of_hosts=2):
     hc = net.addHost( 'hc', ip='10.0.0.95' )
     net.addLink( hr, s1 )
     net.addLink( hc, s1 )
-    net.addLink( s1, s2 )
+    net.addLink( s1, s2, bw=10000,delay=0.16 )
 
     hosts = list()
     #  add all remaining hosts to s2
@@ -56,6 +56,8 @@ def ovsns(number_of_hosts=2):
 
     CLI( net )
     net.stop()
+    # cleanup switch processes
+    subprocess.Popen("kill -9 `ps -ef | grep /tmp/mininet | grep -v grep | awk '{ print $2 }'`", shell=True, stdout=subprocess.PIPE).stdout.read()
 
 if __name__ == '__main__':
     setLogLevel( 'info' )

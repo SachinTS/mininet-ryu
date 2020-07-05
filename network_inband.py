@@ -18,10 +18,10 @@ def ovsns(number_of_hosts=2):
                    build=False)
 
     # setup initial topology. run ovs inside each host s1 and s2
-    h1 = net.addHost( 'hr', ip='10.0.0.90' )
+    hr = net.addHost( 'hr', ip='10.0.0.90' )
     s1 = net.addHost( 's1', ip='0.0.0.0' )
     s2 = net.addHost( 's2', ip='0.0.0.0' )
-    h5 = net.addHost( 'hc', ip='10.0.0.95' )
+    hc = net.addHost( 'hc', ip='10.0.0.95' )
     net.addLink( hr, s1 )
     net.addLink( hc, s1 )
     net.addLink( s1, s2 )

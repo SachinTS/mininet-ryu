@@ -5,12 +5,10 @@ mkdir -p /tmp/mininet-$1
 
 if [ -e /tmp/mininet-$1/conf.db ]; then
    echo DB already exists
-   echo deleting...
-   kill -9 `ps -ef | grep /tmp/mininet | grep -v grep | awk '{ print $2 }'` 
-   rm -rf /tmp/mininet-$1/*
+else
+   echo Createing OVSDB
+   ovsdb-tool create /tmp/mininet-$1/conf.db /usr/share/openvswitch/vswitch.ovsschema
 fi
-echo Createing OVSDB
-ovsdb-tool create /tmp/mininet-$1/conf.db /usr/share/openvswitch/vswitch.ovsschema
 
 ovsdb-server /tmp/mininet-$1/conf.db \
 -vconsole:emer \

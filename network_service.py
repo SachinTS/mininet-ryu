@@ -54,13 +54,15 @@ def myNetwork(number_of_hosts=2):
         net.addLink(s1,host,bw=bandWidth,delay=10)
         # host.cmdPrint('dhclient' + host.defaultIntf().name)
         hosts.append(host)
+    info( '*** Starting network\n')
+    net.start()
     info('** creating switches\n')
     build_switch(net, s1, 's1')
     build_switch(net, s2, 's2')
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
-    info( '*** Starting network\n')
-    net.start()
+
+
     # for host in hosts:
     #     host.cmdPrint('ping -c 3 ' + hr.IP() + ' | grep rtt')
     #

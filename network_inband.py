@@ -71,7 +71,7 @@ def ovsns(number_of_hosts=2):
         # time = datetime.now()
         # info("** time   :")
         # info(str(time.minute) + ':' + str(time.second) + "\n")
-        # time = datetime.now()
+        time = datetime.now()
         net.pingAll()
 
         info("** time    :")

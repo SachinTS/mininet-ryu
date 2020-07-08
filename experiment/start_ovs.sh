@@ -2,9 +2,9 @@
 
 echo Starting OVS for $1
 ovs-vswitchd unix:/tmp/mininet-$1/db.sock \
--vconsole:emer \
+-vconsole:info \
 -vsyslog:err \
--vfile:info \
+-vfile:dbg \
 --mlockall \
 --no-chdir \
 --log-file=/tmp/mininet-$1/ovs-vswitchd.log \

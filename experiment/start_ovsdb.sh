@@ -15,7 +15,7 @@ ovsdb-tool create /tmp/mininet-$1/conf.db /usr/share/openvswitch/vswitch.ovssche
 ovsdb-server /tmp/mininet-$1/conf.db \
 -vconsole:emer \
 -vsyslog:err \
--vfile:info \
+-vfile:dbg \
 --remote=punix:/tmp/mininet-$1/db.sock \
 --private-key=db:Open_vSwitch,SSL,private_key \
 --certificate=db:Open_vSwitch,SSL,certificate \

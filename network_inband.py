@@ -58,28 +58,28 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
-    iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
-    cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
-    hr.cmd(cmd)
-
-    net.pingAll()
-
-    for src in net.hosts:  # For each host in the network
-
-        cmd = 'iperf -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
-        src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
-        cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging'
-        src.cmdPrint(cmd)
-        # time = datetime.now()
-        # info("** time   :")
-        # info(str(time.minute) + ':' + str(time.second) + "\n")
-        time = datetime.now()
-        # net.pingAll()
-
-        info("** time    :")
-        info(str(time.minute) + ':' + str(time.second) + "\n")
-
-    info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
+    # iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
+    # cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+    # hr.cmd(cmd)
+    #
+    # net.pingAll()
+    #
+    # for src in net.hosts:  # For each host in the network
+    #
+    #     cmd = 'iperf -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+    #     src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
+    #     cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
+    #     src.cmdPrint(cmd)
+    #     # time = datetime.now()
+    #     # info("** time   :")
+    #     # info(str(time.minute) + ':' + str(time.second) + "\n")
+    #     time = datetime.now()
+    #     # net.pingAll()
+    #
+    #     info("** time    :")
+    #     info(str(time.minute) + ':' + str(time.second) + "\n")
+    #
+    # info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
     # sleep(iperfDuration)
     CLI( net )
     net.stop()

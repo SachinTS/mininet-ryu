@@ -27,7 +27,9 @@ def ovsns(number_of_hosts=2):
     s1 = net.addHost( 's1', ip='0.0.0.0' )
     s2 = net.addHost( 's2', ip='0.0.0.0' )
     hc = net.addHost( 'hc', ip='10.0.0.95' )
-    net.addLink( hr, s1 )
+
+    # add required links
+    net.addLink( hr, s1, delay=2)
     net.addLink( hc, s1 )
     net.addLink( s1, s2, bw=10000,delay=0.16 )
 

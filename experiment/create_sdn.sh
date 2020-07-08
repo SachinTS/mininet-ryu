@@ -12,3 +12,10 @@ ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock set bridge $1 protocols=OpenFlow13
 ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock set-fail-mode $1 secure
 ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock set-controller $1 tcp:10.0.0.95:6633
 ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock show
+
+# set logging setting
+ovs-appctl vlog/set file:vconn:dbg
+ovs-appctl vlog/set file:dpif:dbg
+ovs-appctl vlog/set file:ofp_msgs:dbg
+ovs-appctl vlog/set file:memory:dbg
+ovs-appctl vlog/set file:flow:dbg

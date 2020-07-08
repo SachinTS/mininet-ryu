@@ -20,7 +20,7 @@ def ovsns(number_of_hosts=2):
     "Create an empty network and add nodes to it."
 
     net = Mininet( topo=None,
-                   build=False, link=OVSLink)
+                   build=False, link=TCULink)
 
     # setup initial topology. run ovs inside each host s1 and s2
     hr = net.addHost( 'hr', ip='10.0.0.90' )

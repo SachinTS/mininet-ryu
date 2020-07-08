@@ -58,7 +58,7 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
-    # iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
+    iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
     cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
     hr.cmd(cmd)
 

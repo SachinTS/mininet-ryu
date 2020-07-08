@@ -62,6 +62,8 @@ def ovsns(number_of_hosts=2):
     cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
     hr.cmd(cmd)
 
+    net.pingAll()
+
     for src in net.hosts:  # For each host in the network
 
         cmd = 'iperf -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
@@ -72,7 +74,7 @@ def ovsns(number_of_hosts=2):
         # info("** time   :")
         # info(str(time.minute) + ':' + str(time.second) + "\n")
         time = datetime.now()
-        net.pingAll()
+        # net.pingAll()
 
         info("** time    :")
         info(str(time.minute) + ':' + str(time.second) + "\n")

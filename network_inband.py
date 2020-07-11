@@ -15,6 +15,30 @@ def build_switch(net, sw=None, sw_str=None):
     sw.cmdPrint('bash experiment/start_ovs.sh ' + sw_str)
     sw.cmdPrint('bash experiment/create_sdn.sh ' + sw_str)
 
+def test_network(hr, net, hosts ):
+    iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
+    cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+    hr.cmd(cmd)
+
+    net.pingAll()
+
+    for src in hosts:  # For each host in the network
+
+        cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+        src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
+        cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
+        src.cmdPrint(cmd)
+        # time = datetime.now()
+        # info("** time   :")
+        # info(str(time.minute) + ':' + str(time.second) + "\n")
+        time = datetime.now()
+        # net.pingAll()
+
+        info("** time    :")
+        info(str(time.minute) + ':' + str(time.second) + "\n")
+
+    info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
+    sleep(iperfDuration)
 def ovsns(number_of_hosts=2):
 
     "Create an empty network and add nodes to it."
@@ -31,7 +55,6 @@ def ovsns(number_of_hosts=2):
     # add required links
     net.addLink( hr, s1, delay=2)
     net.addLink( hc, s1 )
-    net.addLink( s1, s2, bw=10000,delay=0.16 )
 
     hosts = list()
     #  add all remaining hosts to s2
@@ -42,9 +65,8 @@ def ovsns(number_of_hosts=2):
         host = net.addHost(name)
         # Add the link between s2 and  the host
         bandWidth = random.randint(200, 400)
-        net.addLink(s2,host,bw=bandWidth,delay=2)
+        net.addLink(s2,host,params1={bw: 100, delay:2}, params2={bw: 40, delay:2})
         hosts.append(host)
-
     #  start mininet topology
     info( '*** Starting network\n')
     net.start()
@@ -58,29 +80,8 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
-    # iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
-    # cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
-    # hr.cmd(cmd)
-    #
-    # net.pingAll()
-    #
-    # for src in net.hosts:  # For each host in the network
-    #
-    #     cmd = 'iperf -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
-    #     src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
-    #     cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
-    #     src.cmdPrint(cmd)
-    #     # time = datetime.now()
-    #     # info("** time   :")
-    #     # info(str(time.minute) + ':' + str(time.second) + "\n")
-    #     time = datetime.now()
-    #     # net.pingAll()
-    #
-    #     info("** time    :")
-    #     info(str(time.minute) + ':' + str(time.second) + "\n")
-    #
-    # info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
-    # sleep(iperfDuration)
+    test_network(hr, net, hosts)
+
     CLI( net )
     net.stop()
     # cleanup switch processes
@@ -89,3 +90,5 @@ def ovsns(number_of_hosts=2):
 if __name__ == '__main__':
     setLogLevel( 'info' )
     ovsns(int(argv[1]))
+
+    net.addLink( s1, s2, bw=10000,delay=0.16 )

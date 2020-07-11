@@ -5,7 +5,7 @@ from mininet.link import TCULink
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from sys import argv
-
+from time import sleep
 import subprocess
 import random
 from datetime import datetime
@@ -60,7 +60,7 @@ def ovsns(number_of_hosts=2):
     net.addLink( hr, s1, delay=2)
     net.addLink( hc, s1 )
     net.addLink( s1, s2, bw=10000,delay=0.16 )
-    
+
     hosts = list()
     #  add all remaining hosts to s2
     info( '*** Adding hosts and Links\n')

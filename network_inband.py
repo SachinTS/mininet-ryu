@@ -39,6 +39,10 @@ def test_network(hr, net, hosts ):
 
     info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
     sleep(iperfDuration)
+
+
+
+
 def ovsns(number_of_hosts=2):
 
     "Create an empty network and add nodes to it."
@@ -55,7 +59,8 @@ def ovsns(number_of_hosts=2):
     # add required links
     net.addLink( hr, s1, delay=2)
     net.addLink( hc, s1 )
-
+    net.addLink( s1, s2, bw=10000,delay=0.16 )
+    
     hosts = list()
     #  add all remaining hosts to s2
     info( '*** Adding hosts and Links\n')
@@ -90,5 +95,3 @@ def ovsns(number_of_hosts=2):
 if __name__ == '__main__':
     setLogLevel( 'info' )
     ovsns(int(argv[1]))
-
-    net.addLink( s1, s2, bw=10000,delay=0.16 )

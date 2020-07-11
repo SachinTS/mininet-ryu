@@ -28,8 +28,8 @@ def topology():
     s3 = net.addSwitch('s3')
 
     info('*** Creating links\n')
-    net.addLink(h1, s3, params1={bw: 100}, params2={bw: 40})
-    net.addLink(h2, s3, params1={bw: 100}, params2={bw: 40})
+    net.addLink(h2, s3, params1={'bw': 100}, params2={'bw': 40})
+    net.addLink(h1, s3, params1={'bw': 100}, params2={'bw': 40})
 
     info('*** Starting network\n')
     net.start()

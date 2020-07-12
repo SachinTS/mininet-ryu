@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 def tcpdump(host=None, interface=None):
-    cmd = 'tcpdump -s 0 -i ' + interface + ' -w /tmp/'+ interface +'.pcap &'
+    cmd = 'tcpdump -s 0 -i any -w /tmp/'+ interface +'.pcap &'
     host.cmdPrint(cmd)
 
 def build_switch(net, sw=None, sw_str=None):

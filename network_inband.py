@@ -25,7 +25,8 @@ def test_network(hr, net, hosts ):
     cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
     hr.cmd(cmd)
 
-    net.pingAll()
+    # net.pingAll()
+    sleep(2)
 
     for src in hosts:  # For each host in the network
 

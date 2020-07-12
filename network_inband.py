@@ -28,17 +28,21 @@ def test_network(hr, net, hosts ):
     # net.pingAll()
     sleep(2)
 
-    for src in hosts:  # For each host in the network
+    for i,src in enumerate(hosts):  # For each host in the network
+        if i != 48:
+            cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+            src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
+            cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
+            src.cmdPrint(cmd)
+            # time = datetime.now()
+            # info("** time   :")
+            # info(str(time.minute) + ':' + str(time.second) + "\n")
+            time = datetime.now()
+            # net.pingAll()
+    sleep(5)
+    cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+    hosts[48].cmdPrint(cmd)
 
-        cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
-        src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
-        cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
-        src.cmdPrint(cmd)
-        # time = datetime.now()
-        # info("** time   :")
-        # info(str(time.minute) + ':' + str(time.second) + "\n")
-        time = datetime.now()
-        # net.pingAll()
 
         info("** time    :")
         info(str(time.minute) + ':' + str(time.second) + "\n")

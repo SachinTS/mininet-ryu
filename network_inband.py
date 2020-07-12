@@ -38,14 +38,16 @@ def test_network(hr, net, hosts ):
             # info("** time   :")
             # info(str(time.minute) + ':' + str(time.second) + "\n")
             time = datetime.now()
+            info("** time    :")
+            info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
     sleep(5)
     cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
     hosts[48].cmdPrint(cmd)
 
 
-        info("** time    :")
-        info(str(time.minute) + ':' + str(time.second) + "\n")
+    info("** time    :")
+    info(str(time.minute) + ':' + str(time.second) + "\n")
 
     info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
     sleep(iperfDuration)

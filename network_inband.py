@@ -27,9 +27,10 @@ def test_network(hr, net, hosts ):
 
     # net.pingAll()
     sleep(2)
-
+    l = len(hosts)
     for i,src in enumerate(hosts):  # For each host in the network
-        if i != 48:
+
+        if i != (l - 1) :
             cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
             src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
             cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
@@ -43,7 +44,7 @@ def test_network(hr, net, hosts ):
             # net.pingAll()
     sleep(5)
     cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
-    hosts[48].cmdPrint(cmd)
+    hosts[l - 1].cmdPrint(cmd)
 
 
     info("** time    :")

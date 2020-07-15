@@ -34,7 +34,7 @@ def test_network(hr, net, hosts ):
             cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
             src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
             cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
-            src.cmdPrint(cmd)
+            # src.cmdPrint(cmd)
             # time = datetime.now()
             # info("** time   :")
             # info(str(time.minute) + ':' + str(time.second) + "\n")
@@ -97,8 +97,8 @@ def ovsns(number_of_hosts=2):
     build_switch(net, s2, 's2')
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
-    tcpdump(host=s1,interface='s1')
-    tcpdump(host=s2,interface='s2')
+    tcpdump(host=s1,interface='s1-eth2')
+    tcpdump(host=s2,interface='s2-eth0')
     tcpdump(host=hc,interface='hc-eth0')
     test_network(hr, net, hosts)
 

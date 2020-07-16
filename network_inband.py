@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 def tcpdump(host=None, interface=None):
-    cmd = 'tcpdump -B 20096 -tt -s 0 -i any -w /tmp/'+ interface +'.pcap src 10.0.0.54 or dst 10.0.0.54 &'
+    cmd = 'tcpdump -B 20096 -tt -s 0 -i any -w /tmp/'+ interface +'.pcap &'
     host.cmdPrint(cmd)
 
 def build_switch(net, sw=None, sw_str=None):
@@ -46,6 +46,8 @@ def test_network(hr, net, hosts ):
             info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
     sleep(5)
+    cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+    hr.cmdPrint(cmd)
     cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
     hosts[l - 1].cmdPrint(cmd)
 
@@ -100,8 +102,8 @@ def ovsns(number_of_hosts=2):
     build_switch(net, s2, 's2')
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
-    tcpdump(host=s1,interface='s1-eth1')
-    tcpdump(host=s2,interface='s2-eth0')
+    tcpdump(host=s1,interface='s1')
+    tcpdump(host=s2,interface='s2')
     tcpdump(host=hc,interface='hc-eth0')
     test_network(hr, net, hosts)
 

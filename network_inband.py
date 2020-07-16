@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 def tcpdump(host=None, interface=None):
-    cmd = 'tcpdump -B 20096 -tt -s 0 -i any -w /tmp/'+ interface +'.pcap &'
+    cmd = 'tcpdump -B 20096 -tt -s 0 -i any -w /tmp/'+ interface +'.pcap src 10.0.0.54 or src 10.0.0.100 or 10.0.0.101 or 10.0.0.95 &'
     host.cmdPrint(cmd)
 
 def build_switch(net, sw=None, sw_str=None):
@@ -22,7 +22,7 @@ def build_switch(net, sw=None, sw_str=None):
 
 def test_network(hr, net, hosts ):
     iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
-    cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+
     hr.cmd(cmd)
 
     # net.pingAll()
@@ -31,10 +31,13 @@ def test_network(hr, net, hosts ):
     for i,src in enumerate(hosts):  # For each host in the network
 
         if i != (l - 1) :
-            cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
-            src.cmdPrint(cmd)   # Run the client (data source) on h1 to send data to host.IP
+            cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+            src.cmdPrint(cmd)
+            cmd = 'iperf -u -c ' + src.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+            hr.cmdPrint(cmd)
+            # Run the client (data source) on h1 to send data to host.IP
             cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
-            # src.cmdPrint(cmd)
+            src.cmdPrint(cmd)
             # time = datetime.now()
             # info("** time   :")
             # info(str(time.minute) + ':' + str(time.second) + "\n")

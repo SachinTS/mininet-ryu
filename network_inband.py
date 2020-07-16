@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 def tcpdump(host=None, interface=None):
-    cmd = 'tcpdump -B 20096 -tt -s 0 -i any -w /tmp/'+ interface +'.pcap src 10.0.0.54 or src 10.0.0.100 or 10.0.0.101 or 10.0.0.95 &'
+    cmd = 'tcpdump -B 20096 -tt -s 0 -i any -w /tmp/'+ interface +'.pcap src 10.0.0.54 or dst 10.0.0.54 &'
     host.cmdPrint(cmd)
 
 def build_switch(net, sw=None, sw_str=None):
@@ -23,7 +23,7 @@ def build_switch(net, sw=None, sw_str=None):
 def test_network(hr, net, hosts ):
     iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
 
-    hr.cmd(cmd)
+    # hr.cmdPrint(cmd)
 
     # net.pingAll()
     sleep(2)

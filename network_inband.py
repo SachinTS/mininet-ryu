@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from mininet.net import Mininet
-from mininet.link import TCULink
+from mininet.link import TCLink
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from sys import argv
@@ -45,10 +45,11 @@ def test_network(hr, net, hosts ):
             info("** time    :")
             info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
-    sleep(5)
-    cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
-    hr.cmdPrint(cmd)
-    cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+    sleep(10)
+    # cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+    # hr.cmdPrint(cmd)
+    # cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+    cmd = 'ping -c 3 ' + hr.IP() + ' >> /tmp/pinging &'
     hosts[l - 1].cmdPrint(cmd)
 
 
@@ -66,7 +67,7 @@ def ovsns(number_of_hosts=2):
     "Create an empty network and add nodes to it."
 
     net = Mininet( topo=None,
-                   build=False, link=TCULink)
+                   build=False, link=TCLink)
 
     # setup initial topology. run ovs inside each host s1 and s2
     hr = net.addHost( 'hr', ip='10.0.0.90' )
@@ -77,7 +78,7 @@ def ovsns(number_of_hosts=2):
     # add required links
     net.addLink( hr, s1, delay=2)
     net.addLink( hc, s1 )
-    net.addLink( s1, s2, bw=10000,delay=0.16 )
+    net.addLink( s1, s2, bw=20000,delay=0.16 )
 
     hosts = list()
     #  add all remaining hosts to s2
@@ -87,8 +88,8 @@ def ovsns(number_of_hosts=2):
         name = 'h'+str(i)
         host = net.addHost(name)
         # Add the link between s2 and  the host
-        bandWidth = random.randint(200, 400)
-        net.addLink(s2,host,params1={'bw': 40, 'delay':2}, params2={'bw': 100, 'delay':2})
+        bandWidth = random.randint(700, 900)
+        net.addLink(s2,host,params1={'bw': 800, 'delay':2}, params2={'bw': 100, 'delay':2})
         hosts.append(host)
     #  start mininet topology
     info( '*** Starting network\n')

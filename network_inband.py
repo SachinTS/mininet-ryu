@@ -60,8 +60,6 @@ def test_network(hr, net, hosts ):
     sleep(iperfDuration)
 
 
-
-
 def ovsns(number_of_hosts=2):
 
     "Create an empty network and add nodes to it."
@@ -99,10 +97,13 @@ def ovsns(number_of_hosts=2):
                 --verbose 1>/tmp/controller-ryu.log 2>&1 &')
     # setup ovs switches in s1 and s2
     info('** creating switches\n')
+
     build_switch(net, s1, 's1')
     build_switch(net, s2, 's2')
+
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
+
     tcpdump(host=s2,interface='s2')
     tcpdump(host=s1,interface='s1')
     tcpdump(host=hc,interface='hc')

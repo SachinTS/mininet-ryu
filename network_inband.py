@@ -103,9 +103,14 @@ def ovsns(number_of_hosts=2):
     build_switch(net, s2, 's2')
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
-    tcpdump(host=s1,interface='s1')
-    tcpdump(host=s2,interface='s2')
+    tcpdump(host=s1,interface='s1-eth2')
+    tcpdump(host=s1,interface='s1-eth1')
+
+    tcpdump(host=s2,interface='s2-eth0')
+    tcpdump(host=s2,interface='s2-eth50')
+
     tcpdump(host=hc,interface='hc-eth0')
+
     test_network(hr, net, hosts)
 
     CLI( net )

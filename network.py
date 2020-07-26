@@ -28,7 +28,7 @@ def myNetwork(number_of_hosts=2):
     hr = net.addHost('hr')
     net.addLink(s2,hr)
     net.addLink(s2,c0)
-    hosts = []
+    hosts = list()
     info( '*** Adding hosts and Links\n')
     time = datetime.now()
     info("** time  :")

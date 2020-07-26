@@ -74,9 +74,9 @@ def ovsns(number_of_hosts=2):
     hc = net.addHost( 'hc', ip='10.0.0.95' )
 
     # add required links
-    net.addLink( hr, s1, delay=2)
+    net.addLink( hr, s1)
     net.addLink( hc, s1 )
-    net.addLink( s1, s2, bw=20000,delay=0.16 )
+    net.addLink( s1, s2)
 
     hosts = list()
     #  add all remaining hosts to s2
@@ -86,8 +86,8 @@ def ovsns(number_of_hosts=2):
         name = 'h'+str(i)
         host = net.addHost(name)
         # Add the link between s2 and  the host
-        bandWidth = random.randint(700, 900)
-        net.addLink(s2,host,params1={'bw': 800, 'delay':2}, params2={'bw': 100, 'delay':2})
+        # bandWidth = random.randint(700, 900)
+        net.addLink(s2,host)
         hosts.append(host)
     #  start mininet topology
     info( '*** Starting network\n')
@@ -104,11 +104,11 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
-    tcpdump(host=s2,interface='s2')
-    tcpdump(host=s1,interface='s1')
-    tcpdump(host=hc,interface='hc')
-
-    test_network(hr, net, hosts)
+    # tcpdump(host=s2,interface='s2')
+    # tcpdump(host=s1,interface='s1')
+    # tcpdump(host=hc,interface='hc')
+    #
+    # test_network(hr, net, hosts)
 
     CLI( net )
     net.stop()

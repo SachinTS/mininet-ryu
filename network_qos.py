@@ -104,6 +104,11 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
+    # set up queues
+    s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos \
+                        -- --id=@newqos create qos type=linux-htb queues:123=@OFQueue \
+                        -- --id=@OFQueue create queue other-config:max-rate=100000')
+    s2.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_src=10.0.0.5,actions=set_queue:1,normal')
     # tcpdump(host=s2,interface='s2')
     # tcpdump(host=s1,interface='s1')
     # tcpdump(host=hc,interface='hc')

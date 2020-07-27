@@ -86,8 +86,8 @@ def ovsns(number_of_hosts=2):
         name = 'h'+str(i)
         host = net.addHost(name)
         # Add the link between s2 and  the host
-        # bandWidth = random.randint(700, 900)
-        net.addLink(s2,host)
+        bandWidth = random.randint(700, 900)
+        net.addLink(s2,host,params1={'bw': 800, 'delay':2}, params2={'bw': 100, 'delay':2})
         hosts.append(host)
     #  start mininet topology
     info( '*** Starting network\n')
@@ -107,8 +107,8 @@ def ovsns(number_of_hosts=2):
     # set up queues
     s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos \
                         -- --id=@newqos create qos type=linux-htb queues:123=@OFQueue \
-                        -- --id=@OFQueue create queue other-config:max-rate=100000')
-    s2.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_src=10.0.0.5,actions=set_queue:1,normal')
+                        -- --id=@OFQueue create queue other-config:max-rate=1000000')
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_src=10.0.0.6,actions=set_queue:123,normal  -O OpenFlow13')
     # tcpdump(host=s2,interface='s2')
     # tcpdump(host=s1,interface='s1')
     # tcpdump(host=hc,interface='hc')

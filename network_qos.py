@@ -20,7 +20,7 @@ def build_switch(net, sw=None, sw_str=None):
     sw.cmdPrint('bash experiment/start_ovs.sh ' + sw_str)
     sw.cmdPrint('bash experiment/create_sdn.sh ' + sw_str)
 
-def test_network(hr, net, hosts ):
+def test_network(hr, hd, net, hosts ):
     iperfDuration = 20  #To speed-up testing, reduce the iperf duration (while developing your Ryu solution)
 
     # hr.cmdPrint(cmd)
@@ -47,8 +47,8 @@ def test_network(hr, net, hosts ):
             # net.pingAll()
     sleep(3)
     cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
-    hc.cmdPrint(cmd)
-    cmd = 'iperf -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client1 &'
+    hd.cmdPrint(cmd)
+    cmd = 'iperf -c ' + hd.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client1 &'
     # cmd = 'ping -c 3 ' + hr.IP() + ' >> /tmp/pinging &'
     hosts[1].cmdPrint(cmd)
 
@@ -61,15 +61,15 @@ def test_network(hr, net, hosts ):
 
 def setup_queue(s1, s2):
     # set up queues
-    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth3 qos=@newqos \
+    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth2 qos=@newqos \
                         -- --id=@newqos create qos type=linux-htb queues:123=@OFQueue \
                         -- --id=@OFQueue create queue \
-                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+                        other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
-    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth2 qos=@newqos1 \
+    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth3 qos=@newqos1 \
                         -- --id=@newqos1 create qos type=linux-htb queues:234=@OFQueue1 \
                         -- --id=@OFQueue1 create queue \
-                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+                        other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
     s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:123,normal \
                  -O OpenFlow13')
@@ -80,12 +80,12 @@ def setup_queue(s1, s2):
     s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos1 \
                         -- --id=@newqos1 create qos type=linux-htb queues:234=@OFQueue1 \
                         -- --id=@OFQueue1 create queue \
-                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+                        other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
     s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth2 qos=@newqos2 \
                         -- --id=@newqos2 create qos type=linux-htb queues:234=@OFQueue2 \
                         -- --id=@OFQueue2 create queue \
-                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+                        other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
     s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:123,normal \
                  -O OpenFlow13')

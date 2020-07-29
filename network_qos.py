@@ -30,7 +30,7 @@ def test_network(hr, net, hosts ):
     l = len(hosts)
     for i,src in enumerate(hosts):  # For each host in the network
 
-        if i != (l - 1) :
+        if i != 1 :
             cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
             src.cmdPrint(cmd)
             cmd = 'iperf -u -c ' + src.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
@@ -45,12 +45,12 @@ def test_network(hr, net, hosts ):
             info("** time    :")
             info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
-    sleep(10)
-    # cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
-    # hr.cmdPrint(cmd)
-    # cmd = 'iperf -u -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
-    cmd = 'ping -c 3 ' + hr.IP() + ' >> /tmp/pinging &'
-    hosts[l - 1].cmdPrint(cmd)
+    sleep(3)
+    cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+    hc.cmdPrint(cmd)
+    cmd = 'iperf -c ' + hr.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client1 &'
+    # cmd = 'ping -c 3 ' + hr.IP() + ' >> /tmp/pinging &'
+    hosts[1].cmdPrint(cmd)
 
 
     info("** time    :")
@@ -59,6 +59,38 @@ def test_network(hr, net, hosts ):
     info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
     sleep(iperfDuration)
 
+def setup_queue(s1, s2):
+    # set up queues
+    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth3 qos=@newqos \
+                        -- --id=@newqos create qos type=linux-htb queues:123=@OFQueue \
+                        -- --id=@OFQueue create queue \
+                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+
+    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth2 qos=@newqos1 \
+                        -- --id=@newqos1 create qos type=linux-htb queues:234=@OFQueue1 \
+                        -- --id=@OFQueue1 create queue \
+                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+
+    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:123,normal \
+                 -O OpenFlow13')
+    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_src=10.0.0.96,actions=set_queue:234,normal \
+                 -O OpenFlow13')
+
+
+    s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos1 \
+                        -- --id=@newqos1 create qos type=linux-htb queues:234=@OFQueue1 \
+                        -- --id=@OFQueue1 create queue \
+                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+
+    s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth2 qos=@newqos2 \
+                        -- --id=@newqos2 create qos type=linux-htb queues:234=@OFQueue2 \
+                        -- --id=@OFQueue2 create queue \
+                        other-config:max-rate=10000000000 other-config:min-rate=100000000')
+
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:123,normal \
+                 -O OpenFlow13')
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_src=10.0.0.96,actions=set_queue:234,normal \
+                 -O OpenFlow13')
 
 def ovsns(number_of_hosts=2):
 
@@ -72,11 +104,13 @@ def ovsns(number_of_hosts=2):
     s1 = net.addHost( 's1', ip='0.0.0.0' )
     s2 = net.addHost( 's2', ip='0.0.0.0' )
     hc = net.addHost( 'hc', ip='10.0.0.95' )
+    hd = net.addHost( 'hd', ip='10.0.0.96' )
 
     # add required links
-    net.addLink( hr, s1)
+    net.addLink( hr, s1 )
     net.addLink( hc, s1 )
-    net.addLink( s1, s2)
+    net.addLink( hd, s1 )
+    net.addLink( s1, s2 )
 
     hosts = list()
     #  add all remaining hosts to s2
@@ -87,7 +121,8 @@ def ovsns(number_of_hosts=2):
         host = net.addHost(name)
         # Add the link between s2 and  the host
         bandWidth = random.randint(700, 900)
-        net.addLink(s2,host,params1={'bw': 800, 'delay':2}, params2={'bw': 100, 'delay':2})
+        # net.addLink(s2,host,params1={'bw': 800, 'delay':2}, params2={'bw': 100, 'delay':2})
+        net.addLink( s2, host )
         hosts.append(host)
     #  start mininet topology
     info( '*** Starting network\n')
@@ -104,11 +139,8 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
-    # set up queues
-    s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos \
-                        -- --id=@newqos create qos type=linux-htb queues:123=@OFQueue \
-                        -- --id=@OFQueue create queue other-config:max-rate=1000000')
-    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_src=10.0.0.6,actions=set_queue:123,normal  -O OpenFlow13')
+    setup_queue(s1, s2) # set up queue
+
     # tcpdump(host=s2,interface='s2')
     # tcpdump(host=s1,interface='s1')
     # tcpdump(host=hc,interface='hc')
@@ -118,7 +150,8 @@ def ovsns(number_of_hosts=2):
     CLI( net )
     net.stop()
     # cleanup switch processes
-    subprocess.Popen("kill -9 `ps -ef | grep /tmp/mininet | grep -v grep | awk '{ print $2 }'`", shell=True, stdout=subprocess.PIPE).stdout.read()
+    subprocess.Popen("kill -9 `ps -ef | grep /tmp/mininet | grep -v grep | awk '{ print $2 }'`",
+                      shell=True, stdout=subprocess.PIPE).stdout.read()
 
 if __name__ == '__main__':
     setLogLevel( 'info' )

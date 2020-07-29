@@ -5,11 +5,11 @@
 
 #sudo ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock --  list queue -- list qos
 
-# sudo ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2 qos=@newqos -- --id=@newqos create qos type=linux-htb  queues:1=@OFqueue other-config:cbs=8192 -- --id=@OFqueue create queue other-config:max-rate=10000000
+# sudo ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth2 qos=@newqos -- --id=@newqos create qos type=linux-htb  queues:1=@OFqueue other-config:cbs=8192 -- --id=@OFqueue create queue other-config:max-rate=10000000
 # sudo ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock --id=@OFqueue create queue other-config:max-rate=10000000
 
-## ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos -- --id=@newqos create qos type=linux-htb queues:123=@OFQueue -- --id=@OFQueue create queue other-config:max-rate=10000000
+## ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s2-eth2 qos=@newqos1 -- --id=@newqos1 create qos type=linux-htb queues:234=@OFQueue1 -- --id=@OFQueue1 create queue other-config:max-rate=10000000
 # ovs-ofctl add-flow s2 tcp,nw_src=10.0.0.95,actions=set_queue:1,normal -O OpenFlow13
-## sudo ovs-ofctl add-flow s2 priority=65535,ip,nw_src=10.0.0.6,actions=set_queue:123,normal  -O OpenFlow13
+## sudo ovs-ofctl add-flow s2 priority=65535,ip,nw_dst=10.0.0.6,actions=set_queue:234,normal  -O OpenFlow13
 
 # sudo ovs-ofctl queue-stats s2 ALL -O OpenFlow13

@@ -47,10 +47,11 @@ def test_network(hr, hd, net, hosts ):
             # net.pingAll()
     sleep(3)
     cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
-    hd.cmdPrint(cmd)
-    cmd = 'iperf -c ' + hd.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client1 &'
-    # cmd = 'ping -c 3 ' + hr.IP() + ' >> /tmp/pinging &'
     hosts[1].cmdPrint(cmd)
+
+    cmd = 'iperf -c ' + hosts[1].IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client1 &'
+    # cmd = 'ping -c 3 ' + hr.IP() + ' >> /tmp/pinging &'
+    hd.cmdPrint(cmd)
 
 
     info("** time    :")

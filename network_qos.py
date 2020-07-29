@@ -31,9 +31,9 @@ def test_network(hr, hd, net, hosts ):
     for i,src in enumerate(hosts):  # For each host in the network
 
         if i != 1 :
-            cmd = 'iperf -u -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
+            cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
             src.cmdPrint(cmd)
-            cmd = 'iperf -u -c ' + src.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
+            cmd = 'iperf -c ' + src.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
             hr.cmdPrint(cmd)
             # Run the client (data source) on h1 to send data to host.IP
             cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'

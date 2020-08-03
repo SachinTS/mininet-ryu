@@ -129,7 +129,7 @@ def ovsns(number_of_hosts=2):
     info( '*** Starting network\n')
     net.start()
     # start controller in hc
-    hc.cmdPrint('ryu-manager /usr/local/lib/python3.4/dist-packages/ryu/app/simple_switch_13.py \
+    hc.cmdPrint('ryu-manager /home/mininet/mininet-ryu/ryu/l4_switch.py \
                 --verbose 1>/tmp/controller-ryu.log 2>&1 &')
     # setup ovs switches in s1 and s2
     info('** creating switches\n')
@@ -146,6 +146,7 @@ def ovsns(number_of_hosts=2):
     # tcpdump(host=s1,interface='s1')
     # tcpdump(host=hc,interface='hc')
     #
+    sleep(3)
     # test_network(hr, hd, net, hosts)
 
     CLI( net )

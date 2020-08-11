@@ -63,7 +63,7 @@ def test_parallel_con(hr, hosts):
     hr.cmdPrint("cd /tmp; fallocate -l 1600M gentoo_root.img; python -m SimpleHTTPServer 8080 &")
     p = 1
     for host in hosts:
-        host.cmdPrint('for i in {1..'+ str(p)+ '}; do wget  -O /dev/null http://localhost:8080/gentoo_root.img -o wget.txt; done')
+        host.cmdPrint('for i in {1..'+ str(p)+ '}; do wget -b -O /dev/null http://localhost:8080/gentoo_root.img -o wget.txt; done')
 
 def ovsns(number_of_hosts=2):
 

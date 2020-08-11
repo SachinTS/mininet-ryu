@@ -61,6 +61,7 @@ def test_network(hr, net, hosts ):
 
 def test_parallel_con(hr, hosts):
     hr.cmdPrint("cd /tmp; fallocate -l 1600M gentoo_root.img; python -m SimpleHTTPServer 8080 &")
+    sleep(5)
     p = 1
     for host in hosts:
         host.cmdPrint('for i in {1..'+ str(p)+ '}; do cd /tmp; wget -b -O /dev/null http://10.0.0.90:8080/gentoo_root.img; done')

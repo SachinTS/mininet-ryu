@@ -122,6 +122,7 @@ def ovsns(number_of_hosts=2):
     net.stop()
     # cleanup switch processes
     subprocess.Popen("kill -9 `ps -ef | grep /tmp/mininet | grep -v grep | awk '{ print $2 }'`", shell=True, stdout=subprocess.PIPE).stdout.read()
+    subprocess.Popen("kill -9 `ps -ef | grep SimpleHTTPServer | grep -v grep | awk '{ print $2 }'`", shell=True, stdout=subprocess.PIPE).stdout.read()
 
 if __name__ == '__main__':
     setLogLevel( 'info' )

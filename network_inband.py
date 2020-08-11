@@ -59,6 +59,11 @@ def test_network(hr, net, hosts ):
     info('\n*** Wait ',str(iperfDuration), ' seconds for Iperf to Finish\n')
     sleep(iperfDuration)
 
+def test_parallel_con(hr, hosts):
+    hr.cmdPrint("cd /tmp; fallocate -l 1600M gentoo_root.img; python -m SimpleHTTPServer 8080 &")
+    p = 1
+    for host in hosts:
+        host.cmdPrint('for i in {1..'+ str(p)+ '}; do wget  -O /dev/null http://localhost:8080/gentoo_root.img -o wget.txt; done')
 
 def ovsns(number_of_hosts=2):
 
@@ -103,12 +108,15 @@ def ovsns(number_of_hosts=2):
 
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
+    #
+    # tcpdump(host=s2,interface='s2')
+    # tcpdump(host=s1,interface='s1')
+    # tcpdump(host=hc,interface='hc')
 
-    tcpdump(host=s2,interface='s2')
-    tcpdump(host=s1,interface='s1')
-    tcpdump(host=hc,interface='hc')
+    # test_network(hr, net, hosts)
 
-    test_network(hr, net, hosts)
+    test_parallel_con(hr, hosts)
+
 
     CLI( net )
     net.stop()

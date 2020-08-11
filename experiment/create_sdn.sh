@@ -10,7 +10,7 @@ done
 #ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock add-port $1 $1-eth1
 ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock set bridge $1 protocols=OpenFlow13
 ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock set-fail-mode $1 secure
-ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock set-controller $1 tcp:10.0.0.95:6633
+ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock set-controller $1 tcp:10.0.0.95:6653
 ovs-vsctl --db=unix:/tmp/mininet-$1/db.sock show
 
 # # set logging setting

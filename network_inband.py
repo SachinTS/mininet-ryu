@@ -60,11 +60,13 @@ def test_network(hr, net, hosts ):
     sleep(iperfDuration)
 
 def test_parallel_con(hr, hosts):
-    hr.cmdPrint("cd /tmp; fallocate -l 1600M gentoo_root.img; python -m SimpleHTTPServer 8080 &")
+
     sleep(5)
     p = 1
-    for host in hosts:
-        host.cmdPrint('cd /tmp; wget -b -O /dev/null http://10.0.0.90:8080/gentoo_root.img')
+    port_list = random.sample(range(45000, 46000), len(hosts))
+    for i,host in enumerate(hosts):
+        hr.cmdPrint("cd /tmp; fallocate -l 1600M gentoo_root.img; python -m SimpleHTTPServer "+ str(port_list[i]) +" &")
+        host.cmdPrint("cd /tmp; wget -b -O /dev/null http://10.0.0.90:"+ str(port_list[i])+ "/gentoo_root.img")
 
 def ovsns(number_of_hosts=2):
 

@@ -114,7 +114,7 @@ def ovsns(number_of_hosts=2):
     # tcpdump(host=hc,interface='hc')
 
     # test_network(hr, net, hosts)
-
+    sleep(2) # sleep for the OF handshake
     test_parallel_con(hr, hosts)
 
 

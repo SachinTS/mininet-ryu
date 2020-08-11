@@ -92,7 +92,7 @@ def ovsns(number_of_hosts=2):
         host = net.addHost(name)
         # Add the link between s2 and  the host
         bandWidth = random.randint(700, 900)
-        net.addLink(s2,host,params1={'bw': 100, 'delay':2}, params2={'bw': 400, 'delay':2})
+        net.addLink(s2,host,params1={'bw': 400, 'delay':2}, params2={'bw': 100, 'delay':2})
         hosts.append(host)
     #  start mininet topology
     info( '*** Starting network\n')

@@ -64,7 +64,7 @@ def test_parallel_con(hr, hosts):
     sleep(5)
     p = 1
     for host in hosts:
-        host.cmdPrint('for i in {1..'+ str(p)+ '}; do cd /tmp; wget -b -O /dev/null http://10.0.0.90:8080/gentoo_root.img; done')
+        host.cmdPrint('cd /tmp; wget -b -O /dev/null http://10.0.0.90:8080/gentoo_root.img')
 
 def ovsns(number_of_hosts=2):
 

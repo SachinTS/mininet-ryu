@@ -83,7 +83,7 @@ def setup_queue(s1, s2):
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
 def add_flows(s1, s2):
-    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:123,normal \
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:123,normal \
                  -O OpenFlow13')
     s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_src=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
@@ -141,7 +141,7 @@ def ovsns(number_of_hosts=2):
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
     setup_queue(s1, s2) # set up queue
-    add_flows(s1, s2)
+    # add_flows(s1, s2)
     # tcpdump(host=s2,interface='s2')
     # tcpdump(host=s1,interface='s1')
     # tcpdump(host=hc,interface='hc')

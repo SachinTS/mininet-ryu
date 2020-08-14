@@ -36,8 +36,6 @@ def test_network(hr, hd, net, hosts ):
             cmd = 'iperf -c ' + src.IP() + ' -t '+ str(iperfDuration) +' >> /tmp/iperf_client &'
             hr.cmdPrint(cmd)
             # Run the client (data source) on h1 to send data to host.IP
-            cmd = 'ping -c 5000 -f ' + hr.IP() + ' >> /tmp/pinging &'
-            src.cmdPrint(cmd)
             # time = datetime.now()
             # info("** time   :")
             # info(str(time.minute) + ':' + str(time.second) + "\n")
@@ -45,6 +43,9 @@ def test_network(hr, hd, net, hosts ):
             info("** time    :")
             info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
+    if i == (l - l/2):
+        cmd = 'ping -c 20 -f ' + hr.IP() + ' >> /tmp/pinging &'
+        src.cmdPrint(cmd)
     sleep(3)
     cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'
     hosts[1].cmdPrint(cmd)
@@ -63,7 +64,7 @@ def test_network(hr, hd, net, hosts ):
 def setup_queue(s1, s2):
     # set up queues
     s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth2 qos=@newqos \
-                        -- --id=@newqos create qos type=linux-htb queues:123=@OFQueue \
+                        -- --id=@newqos create qos type=linux-htb queues:234=@OFQueue \
                         -- --id=@OFQueue create queue \
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
@@ -83,12 +84,12 @@ def setup_queue(s1, s2):
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
 def add_flows(s1, s2):
-    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:123,normal \
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
     s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_src=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
 
-    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:123,normal \
+    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
     s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_src=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
@@ -140,7 +141,7 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
-    setup_queue(s1, s2) # set up queue
+    # setup_queue(s1, s2) # set up queue
     # add_flows(s1, s2)
     # tcpdump(host=s2,interface='s2')
     # tcpdump(host=s1,interface='s1')

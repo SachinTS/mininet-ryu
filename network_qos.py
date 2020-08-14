@@ -44,7 +44,7 @@ def test_network(hr, hd, net, hosts ):
             info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
         if i == (l - l/2):
-            cmd = 'ping -c 20 -f ' + hr.IP() + ' >> /tmp/pinging &'
+            cmd = 'ping -c 20 -f ' + hd.IP() + ' >> /tmp/pinging &'
             src.cmdPrint(cmd)
     sleep(3)
     cmd = 'iperf -s ' + '-t' + str(iperfDuration) + '  >> /tmp/iperf_server.log &'

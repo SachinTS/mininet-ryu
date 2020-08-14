@@ -86,12 +86,12 @@ def setup_queue(s1, s2):
 def add_flows(s1, s2):
     s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
-    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,ip,nw_src=10.0.0.96,actions=set_queue:234,normal \
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_src=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
 
-    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_dst=10.0.0.96,actions=set_queue:234,normal \
+    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
-    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,ip,nw_src=10.0.0.96,actions=set_queue:234,normal \
+    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,icmp,nw_src=10.0.0.96,actions=set_queue:234,normal \
                  -O OpenFlow13')
 
 def ovsns(number_of_hosts=2):

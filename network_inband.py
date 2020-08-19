@@ -107,7 +107,7 @@ def ovsns(number_of_hosts=2):
     # setup ovs switches in s1 and s2
     info('** creating switches\n')
 
-    subprocess.Popen("/bin/bash", "/home/mininet/mininet-ryu/experiment/monitor_ovs.sh")
+    subprocess.Popen(["/bin/bash", "/home/mininet/mininet-ryu/experiment/monitor_ovs.sh"])
     build_switch(net, s1, 's1')
     build_switch(net, s2, 's2')
 

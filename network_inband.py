@@ -107,6 +107,7 @@ def ovsns(number_of_hosts=2):
     # setup ovs switches in s1 and s2
     info('** creating switches\n')
 
+    subprocess.Popen("bash experiment/monitor_ovs.sh")
     build_switch(net, s1, 's1')
     build_switch(net, s2, 's2')
 
@@ -128,6 +129,8 @@ def ovsns(number_of_hosts=2):
     # cleanup switch processes
     subprocess.Popen("kill -9 `ps -ef | grep /tmp/mininet | grep -v grep | awk '{ print $2 }'`", shell=True, stdout=subprocess.PIPE).stdout.read()
     subprocess.Popen("kill -9 `ps -ef | grep SimpleHTTPServer | grep -v grep | awk '{ print $2 }'`", shell=True, stdout=subprocess.PIPE).stdout.read()
+    subprocess.Popen("kill -9 `ps -ef | grep monitor_ovs | grep -v grep | awk '{ print $2 }'`", shell=True, stdout=subprocess.PIPE).stdout.read()
+
 
 if __name__ == '__main__':
     setLogLevel( 'info' )

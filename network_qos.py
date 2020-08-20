@@ -11,8 +11,8 @@ import random
 from datetime import datetime
 
 
-def tcpdump(host=None, interface=None):
-    cmd = 'tcpdump -s 0 -i any -w /tmp/'+ interface +'.pcap &'
+def tcpdump(host=None, interface='any'):
+    cmd = 'tcpdump -s 0 -i '+ interface+' -w /tmp/'+ interface +'.pcap &'
     host.cmdPrint(cmd)
 
 def build_switch(net, sw=None, sw_str=None):
@@ -141,11 +141,11 @@ def ovsns(number_of_hosts=2):
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
 
-    # setup_queue(s1, s2) # set up queue
-    # add_flows(s1, s2)
+    setup_queue(s1, s2) # set up queue
+    add_flows(s1, s2)
     # tcpdump(host=s2,interface='s2')
     # tcpdump(host=s1,interface='s1')
-    # tcpdump(host=hc,interface='hc')
+    tcpdump(host=hd,interface='hd-eth0')
     #
     sleep(3)
     # test_network(hr, hd, net, hosts)

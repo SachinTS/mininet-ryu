@@ -150,7 +150,7 @@ def ovsns(number_of_hosts=2):
     tcpdump(host=hd,interface='hd-eth0')
     #
     sleep(3)
-    # test_network(hr, hd, net, hosts)
+    test_network(hr, hd, net, hosts)
 
     CLI( net )
     net.stop()

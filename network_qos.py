@@ -44,7 +44,7 @@ def test_network(hr, hd, net, hosts ):
             info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
         if i == (l - l/2):
-            tcpdump(src)
+            # tcpdump(src)
             sleep(5)
             cmd = 'ping -c 20 ' + hd.IP() + ' >> /tmp/pinging &'
             src.cmdPrint(cmd)
@@ -147,7 +147,9 @@ def ovsns(number_of_hosts=2):
     add_flows(s1, s2)
     # tcpdump(host=s2,interface='s2')
     # tcpdump(host=s1,interface='s1')
+    l = len(hosts)
     tcpdump(host=hd,interface='hd-eth0')
+    tcpdump(host=hosts[l - l/2])
     #
     sleep(3)
     test_network(hr, hd, net, hosts)

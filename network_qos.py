@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 def tcpdump(host=None, interface='any'):
-    cmd = 'tcpdump -s 0 -i '+ interface+' -w /tmp/'+ interface +'.pcap &'
+    cmd = 'tcpdump -s 0 -i '+ interface+' icmp -w /tmp/'+ interface +'.pcap &'
     host.cmdPrint(cmd)
 
 def build_switch(net, sw=None, sw_str=None):
@@ -44,6 +44,7 @@ def test_network(hr, hd, net, hosts ):
             info(str(time.minute) + ':' + str(time.second) + "\n")
             # net.pingAll()
         if i == (l - l/2):
+            tcpdump(src)
             cmd = 'ping -c 20 ' + hd.IP() + ' >> /tmp/pinging &'
             src.cmdPrint(cmd)
     sleep(3)

@@ -45,6 +45,7 @@ def test_network(hr, hd, net, hosts ):
             # net.pingAll()
         if i == (l - l/2):
             tcpdump(src)
+            sleep(5)
             cmd = 'ping -c 20 ' + hd.IP() + ' >> /tmp/pinging &'
             src.cmdPrint(cmd)
     sleep(3)

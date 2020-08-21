@@ -156,6 +156,7 @@ def ovsns(number_of_hosts=2):
     l = len(hosts)
     tcpdump(host=hd,interface='hd-eth0')
     tcpdump(host=hosts[l - l/2])
+    hosts[l - l/2].cmdPrint("ping -c 1 10.0.0.96" )
     #
     sleep(3)
     test_network(hr, hd, net, hosts)

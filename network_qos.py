@@ -65,6 +65,11 @@ def test_network(hr, hd, net, hosts ):
 
 def setup_queue(s1, s2):
     # set up queues
+    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock -- set port s1-eth0 qos=@newqos \
+                        -- --id=@newqos create qos type=linux-htb queues:234=@OFQueue \
+                        -- --id=@OFQueue create queue \
+                        other-config:max-rate=1000000000 other-config:min-rate=300000000')
+
     s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock -- set port s1-eth2 qos=@newqos \
                         -- --id=@newqos create qos type=PRONTO_STRICT queues:7=@OFQueue \
                         -- --id=@OFQueue create queue \
@@ -73,6 +78,11 @@ def setup_queue(s1, s2):
     s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth3 qos=@newqos1 \
                         -- --id=@newqos1 create qos type=PRONTO_STRICT queues:7=@OFQueue1 \
                         -- --id=@OFQueue1 create queue \
+                        other-config:max-rate=1000000000 other-config:min-rate=300000000')
+
+    s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock -- set port s1-eth1 qos=@newqos \
+                        -- --id=@newqos create qos type=linux-htb queues:234=@OFQueue \
+                        -- --id=@OFQueue create queue \
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
     s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos1 \

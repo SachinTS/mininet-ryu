@@ -65,35 +65,35 @@ def test_network(hr, hd, net, hosts ):
 
 def setup_queue(s1, s2):
     # set up queues
-    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth2 qos=@newqos \
-                        -- --id=@newqos create qos type=linux-htb queues:234=@OFQueue \
+    s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock -- set port s1-eth2 qos=@newqos \
+                        -- --id=@newqos create qos type=PRONTO_STRICT queues:7=@OFQueue \
                         -- --id=@OFQueue create queue \
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
     s1.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock set port s1-eth3 qos=@newqos1 \
-                        -- --id=@newqos1 create qos type=linux-htb queues:234=@OFQueue1 \
+                        -- --id=@newqos1 create qos type=PRONTO_STRICT queues:7=@OFQueue1 \
                         -- --id=@OFQueue1 create queue \
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
     s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth0 qos=@newqos1 \
-                        -- --id=@newqos1 create qos type=linux-htb queues:234=@OFQueue1 \
+                        -- --id=@newqos1 create qos type=PRONTO_STRICT queues:7=@OFQueue1 \
                         -- --id=@OFQueue1 create queue \
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
     s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s2/db.sock set port s2-eth2 qos=@newqos2 \
-                        -- --id=@newqos2 create qos type=linux-htb queues:234=@OFQueue2 \
+                        -- --id=@newqos2 create qos type=PRONTO_STRICT queues:7=@OFQueue2 \
                         -- --id=@OFQueue2 create queue \
                         other-config:max-rate=1000000000 other-config:min-rate=300000000')
 
 def add_flows(s1, s2):
-    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:234,normal \
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:7,normal \
                  -O OpenFlow13')
-    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_src=10.0.0.96,actions=set_queue:234,normal \
+    s2.cmdPrint('ovs-ofctl add-flow s2 priority=65535,icmp,nw_src=10.0.0.96,actions=set_queue:7,normal \
                  -O OpenFlow13')
 
-    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:234,normal \
+    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,icmp,nw_dst=10.0.0.96,actions=set_queue:7,normal \
                  -O OpenFlow13')
-    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,icmp,nw_src=10.0.0.96,actions=set_queue:234,normal \
+    s1.cmdPrint('ovs-ofctl add-flow s1 priority=65535,icmp,nw_src=10.0.0.96,actions=set_queue:7,normal \
                  -O OpenFlow13')
 
 def ovsns(number_of_hosts=2):

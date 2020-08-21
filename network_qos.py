@@ -77,7 +77,7 @@ def setup_queue(s1, s2):
                         other-config:max-rate=1000000000 other-config:min-rate=300000000 other-config:priority=0')
 
     s2.cmdPrint('ovs-vsctl --db=unix:/tmp/mininet-s1/db.sock -- set port s1-eth1 qos=@newqos \
-                        -- --id=@newqos create qos type=linux-htb queues:234=@OFQueue \
+                        -- --id=@newqos create qos type=linux-htb queues:7=@OFQueue \
                         -- --id=@OFQueue create queue \
                         other-config:max-rate=1000000000 other-config:min-rate=300000000 other-config:priority=0')
 

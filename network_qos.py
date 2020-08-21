@@ -142,7 +142,7 @@ def ovsns(number_of_hosts=2):
 
     s1.cmdPrint('ifconfig s1 inet 10.0.0.100/8')
     s2.cmdPrint('ifconfig s2 inet 10.0.0.101/8')
-    net.pingAll()
+    # net.pingAll()
     setup_queue(s1, s2) # set up queue
     add_flows(s1, s2)
     # tcpdump(host=s2,interface='s2')

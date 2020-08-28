@@ -1,11 +1,4 @@
-##
-
-# This file is a solution to Coursework-2 (Learning Switch)
-
-# You should adapt this (or adapt your own solution from week 14) for Coursework 3
-
-##
-
+# l4 switch for Ryu
 
 from ryu.base import app_manager
 

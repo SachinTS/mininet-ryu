@@ -121,7 +121,7 @@ def ovsns(number_of_hosts=2):
     # test_network(hr, net, hosts)
     net.pingAll()
     sleep(2) # sleep for the OF handshake
-    test_parallel_con(hr, hosts)
+    # test_parallel_con(hr, hosts)
 
 
     CLI( net )
